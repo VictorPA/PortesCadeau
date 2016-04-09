@@ -13,8 +13,13 @@ import java.net.URISyntaxException;
  * Created by Victor on 08/04/2016.
  * @author Brandon Barajas
  */
+
 public class App {
     public static void main(String[] args) throws IOException {
+
+        /**TODO
+         * a good programm;
+         */
 
         new Game();
         Scanner scanner = new Scanner(System.in);
@@ -30,7 +35,6 @@ public class App {
             } catch (NumberFormatException e) {
                 System.out.println("Fin de la simulation");
                 break;
-
             }
 
         }

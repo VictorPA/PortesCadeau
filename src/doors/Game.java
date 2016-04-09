@@ -21,6 +21,7 @@ public class Game {
             } catch (NumberFormatException e) {
                 System.out.println("Erreur");
                 System.out.println("Entrer le nombre de parties");
+
             }
         }
 
