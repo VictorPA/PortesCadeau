@@ -1,9 +1,13 @@
 package doors;
 
+import java.awt.Graphics;
+
+import javax.swing.JComponent;
+
 /**
  * Created by Victor on 08/04/2016.
  */
-public class Door {
+public class Door extends JComponent {
 
     private boolean chosen;
     private boolean gifted;
@@ -55,4 +59,6 @@ public class Door {
     public void setOpened() {
         this.opened = true;
     }
+    
+   
 }
