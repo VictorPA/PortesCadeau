@@ -8,69 +8,30 @@ import java.util.Scanner;
  * Created by Victor on 08/04/2016.
  */
 public class Game {
-    public Game(){
 
-        Scanner scanner = new Scanner(System.in);
+    IPlayerFactory playerFactory;
 
-        System.out.println("Entrer le nombre de parties");
-        int gamesInput;
-        while(true){
-            try {
-                gamesInput = Integer.parseInt(scanner.nextLine());
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Erreur");
-                System.out.println("Entrer le nombre de parties");
+    Room room;
+    Player player;
+    int simulationsNumber;
 
-            }
-        }
+    public Game(IPlayerFactory playerFactory) {
+        this.playerFactory = playerFactory;
+    }
 
-        System.out.println("Entrer le nombre de portes");
-        int doorsInput;
-        while(true){
-            try {
-                doorsInput = Integer.parseInt(scanner.nextLine());
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Erreur");
-                System.out.println("Entrer le nombre de portes");
-            }
-        }
+    public void send(int gamesInput, int doorsInput, int playerInput) {
 
-        System.out.println("Entrer le type de joueur.");
-        System.out.println("1: Garder la même porte");
-        System.out.println("2: Toujours changer");
-        Player player = null;
-        int playerInput = 0;
 
-        while (true) {
-            try {
-                playerInput = Integer.parseInt(scanner.nextLine());
-                if(playerInput != 1 && playerInput != 2)
-                    continue;
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("Erreur");
-                System.out.println("Entrer le type de joueur.");
-                System.out.println("1: Garder la même porte");
-                System.out.println("2: Toujours changer");
-            }
-
-        }
-        if(playerInput == 1)
-            player = new PlayerKeepingDoor();
-        if(playerInput == 2)
-            player = new PlayerDoorChanging();
-
-        Room game = new Room(doorsInput);
-        ArrayList<Door> doors = game.getDoors();
+        player = playerFactory.choosePlayer(playerInput);
+        room = new Room(doorsInput);
+        ArrayList<Door> doors = room.getDoors();
         int doorNumbers = doors.size();
-
         int n;
+       // long startTime = System.nanoTime();
 
 
         for (n = 0; n < gamesInput; ++n) {
-            game.resetRoom();
+            room.resetRoom();
             Random rand = new Random();
             int randomNum = rand.nextInt(doorNumbers);
 
@@ -78,7 +39,7 @@ public class Game {
             doors.get(randomNum).choose();
 
             //
-            int x =-1;
+            int x = -1;
 
             for (int i = 0; i < doors.size(); ++i) {
                 if (doors.get(i).isChosen() && doors.get(i).isGifted()) {
@@ -90,7 +51,7 @@ public class Game {
                 doors.get(i).open();
 
             }
-            if(x != -1){
+            if (x != -1) {
                 if (x == 0)
                     doors.get(1).close();
                 else if (x == doors.size() - 1)
@@ -100,12 +61,22 @@ public class Game {
             }
 
 
-
             player.end(doors);
 
 
         }
-        System.out.println("Nombre de portes : "+doorNumbers);
-        System.out.println("Le joueur a gagné " + player.score + " fois sur " + n+".");
+        this.simulationsNumber = n;
+        //long endTime = System.nanoTime();
+
+        //System.out.println((endTime - startTime)/1000000);
+
+    }
+
+    public int getDoorsNumber() {
+        return this.simulationsNumber;
+    }
+
+    public int getResult() {
+        return this.player.getScore();
     }
 }
